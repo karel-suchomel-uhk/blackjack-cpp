@@ -34,6 +34,6 @@ const std::string &Player::getUsername() const {
   return username;
 }
 
-void Player::setUsername(const std::string &username) {
-  Player::username = username;
+void Player::setUsername(const std::string &usernameRef) {
+  Player::username = usernameRef;
 }

@@ -10,12 +10,13 @@ Dealer::Dealer(const std::string &username, Deck &deck) : Player(username), deck
 void Dealer::dealCards(std::vector<Player> &players) {
   this->hit(deck);
   this->hit(deck);
-  printf("%s's hand: \n", getUsername().c_str());
+  printf("\n%s's hand: \n", getUsername().c_str());
   printHand();
   for (Player player: players) {
     player.hit(deck);
     player.hit(deck);
-    printf("%s's hand: \n", player.getUsername().c_str());
+    printf("\n%s's hand: ", player.getUsername().c_str());
+    printf("%i\n", player.checkHand());
     player.printHand();
   }
 }

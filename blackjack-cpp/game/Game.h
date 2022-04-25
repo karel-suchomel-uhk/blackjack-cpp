@@ -8,7 +8,8 @@
 #include <string>
 #include <GameLibrary.h>
 #include <player/Player.h>
-#include "dealer/Dealer.h"
+#include <dealer/Dealer.h>
+#include <cctype>
 //#include <deck/Deck.h>
 
 class Game: public GameLibrary {
@@ -18,6 +19,8 @@ class Game: public GameLibrary {
     void createPlayer();
     void initialize();
     void printPlayers();
+    static bool isNumber(const std::string& str);
+
   public:
 
     explicit Game(const std::string &name);

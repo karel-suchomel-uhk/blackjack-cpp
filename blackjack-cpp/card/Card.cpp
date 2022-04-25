@@ -84,7 +84,8 @@ void Card::printCard() {
       suitString = "♣";
   }
 
-  std::cout << to_string(cardValue) << suitString <<std::endl;
+  printf("| %i", getCardIntValue());
+  printf("%s |\n", suitString.c_str());
 }
 
 Card::Suit& operator ++(Card::Suit& e)

@@ -4,7 +4,6 @@
 
 #include <game/Game.h>
 #include <deck/Deck.h>
-
 #include <utility>
 
 using namespace std;
@@ -16,23 +15,37 @@ void Game::startGame() {
 }
 
 void Game::initialize() {
-  int numberOfPlayer;
+  string numberOfPlayer = "0";
+  string *numberOfPlayersRef = &numberOfPlayer;
+  int intValue = stoi(numberOfPlayer);
+  bool isInputNumber = false;
+
   GameLibrary::startGame();
   Deck deck = Deck();
   Dealer dealer = Dealer("Dealer", deck);
-  printf("How many player's are going to play? ");
-  cin >> numberOfPlayer;
-  for (int i = 0; i < numberOfPlayer; i++) {
-    createPlayer();
-  }
-  printPlayers();
-  dealer.dealCards(players);
 
+  do {
+    printf("How many player's are going to play? ");
+    cin >> *numberOfPlayersRef;
+    isInputNumber = isNumber(*numberOfPlayersRef);
+    if (isInputNumber) {
+      intValue = stoi(*numberOfPlayersRef);
+
+      if (intValue > 0) {
+        for (int i = 0; i < intValue; i++) {
+          createPlayer();
+        }
+        printPlayers();
+        dealer.dealCards(players);
+      }else{
+        printf("At least 1 player must be input!!\n");
+      }
+    } else {
+      printf("Please enter a valid number!!\n");
+    }
+  } while (!isInputNumber || intValue <= 0);
 }
 
-void Game::createDealer(Deck &deck) {
-  Dealer dealer = Dealer("Dealer", deck);
-}
 
 void Game::createPlayer() {
   string userName;
@@ -45,10 +58,20 @@ void Game::createPlayer() {
 void Game::printPlayers() {
   int index = 1;
   printf("\n");
-  index++;
   for (Player &player: players) {
     printf("%d. ", index);
     printf("%s\n", player.getUsername().c_str());
     index++;
   }
+}
+
+bool Game::isNumber(const string &s) {
+  bool hitDecimal = false;
+  for (char c: s) {
+    if (c == '.' && !hitDecimal) // 2 '.' in string mean invalid
+      hitDecimal = true; // first hit here, we forgive and skip
+    else if (!isdigit(c))
+      return false; // not ., not
+  }
+  return true;
 }
