@@ -7,22 +7,19 @@
 
 Dealer::Dealer(const std::string &username, Deck &deck) : Player(username), deck(deck) {}
 
+Dealer::Dealer() = default;
+
 void Dealer::dealCards(std::vector<Player> &players) {
-  this->hit(deck);
-  this->hit(deck);
+  this->hit(deck.drawACard());
+  this->hit(deck.drawACard());
   printf("\n%s's hand: \n", getUsername().c_str());
   printHand();
-  for (Player player: players) {
-    player.hit(deck);
-    player.hit(deck);
-    printf("\n%s's hand: ", player.getUsername().c_str());
-    printf("%i\n", player.checkHand());
-    player.printHand();
+  for (Player& player: players) {
+    player.hit(deck.drawACard());
+    player.hit(deck.drawACard());
   }
 }
 
-Deck &Dealer::getDeck() const {
+Deck &Dealer::getDeck() {
   return deck;
 }
-
-

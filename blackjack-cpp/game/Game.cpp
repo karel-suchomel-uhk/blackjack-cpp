@@ -5,6 +5,7 @@
 #include <game/Game.h>
 #include <deck/Deck.h>
 #include <utility>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -12,17 +13,22 @@ Game::Game(const string &name) : GameLibrary(name) {}
 
 void Game::startGame() {
   initialize();
+  mainGameLoop();
 }
 
 void Game::initialize() {
+  GameLibrary::startGame();
+  Deck deck = Deck();
+  Dealer d = Dealer("Dealer", deck);
+  setDealer(d);
+  initializePlayers();
+}
+
+void Game::initializePlayers() {
   string numberOfPlayer = "0";
   string *numberOfPlayersRef = &numberOfPlayer;
   int intValue = stoi(numberOfPlayer);
   bool isInputNumber = false;
-
-  GameLibrary::startGame();
-  Deck deck = Deck();
-  Dealer dealer = Dealer("Dealer", deck);
 
   do {
     printf("How many player's are going to play? ");
@@ -36,7 +42,6 @@ void Game::initialize() {
           createPlayer();
         }
         printPlayers();
-        dealer.dealCards(players);
       }else{
         printf("At least 1 player must be input!!\n");
       }
@@ -46,6 +51,37 @@ void Game::initialize() {
   } while (!isInputNumber || intValue <= 0);
 }
 
+void Game::mainGameLoop() {
+  printf("\nStarting game...\n");
+  dealer.dealCards(players);
+
+  int currentPlayer = 0;
+  for (Player& player: players) {
+    currentPlayer++;
+    printf("\n******* %s's turn *******\n", player.getUsername().c_str());
+    printf("\n%s's hand: ", player.getUsername().c_str());
+    printf("%i\n", player.checkHand());
+    player.printHand();
+    char choice = ' ';
+    char* choiceRef = &choice;
+    while(player.checkHand() < 21 && *choiceRef != 'S' || player.checkHand() < 21 && *choiceRef != 's'){
+      choiceRef = player.presentChoice();
+      if (*choiceRef == 'H' || *choiceRef == 'h'){
+
+        player.hit(dealer.getDeck().drawACard());
+      }else if(*choiceRef == 'S' || *choiceRef == 's'){
+        player.stand();
+      }else{
+        printf("Invalid input, enter only H or S.");
+      }
+      printf("\n%s's hand: ", player.getUsername().c_str());
+      printf("%i\n", player.checkHand());
+    }
+  }
+  printf("******* End of Turn *******\n");
+  while (dealer.checkHand() < 17)
+    dealer.hit(dealer.getDeck().drawACard());
+}
 
 void Game::createPlayer() {
   string userName;
@@ -74,4 +110,12 @@ bool Game::isNumber(const string &s) {
       return false; // not ., not
   }
   return true;
+}
+
+void Game::setDealer(Dealer dealerRef) {
+  this->dealer = std::move(dealerRef);
+}
+
+void Game::checkWin() {
+
 }

@@ -15,8 +15,7 @@ class Deck {
 
   public:
     Deck();
-
     void printDeck();
-    Card drawACard();
+    Card& drawACard();
     bool isDeckEmpty();
 };

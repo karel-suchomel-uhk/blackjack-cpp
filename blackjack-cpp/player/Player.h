@@ -11,11 +11,13 @@ class Player{
   public:
     explicit Player(std::string username);
 
-    void hit(Deck &deck);
+    Player();
+
+    void hit(Card card);
     void stand();
     int checkHand();
     void printHand();
-
+    char* presentChoice();
     const std::string &getUsername() const;
 
     void setUsername(const std::string &username);

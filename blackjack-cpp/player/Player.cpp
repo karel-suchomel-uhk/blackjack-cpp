@@ -7,10 +7,12 @@
 #include <utility>
 using namespace std;
 
+Player::Player() = default;
+
 Player::Player(string username) : username(std::move(username)) {}
 
-void Player::hit(Deck &deck) {
-  this->hand.push_back(deck.drawACard());
+void Player::hit(Card card) {
+  this->hand.push_back(card);
 }
 
 void Player::stand() {}
@@ -36,4 +38,13 @@ const std::string &Player::getUsername() const {
 
 void Player::setUsername(const std::string &usernameRef) {
   Player::username = usernameRef;
+}
+
+char* Player::presentChoice() {
+  printf("Hit or Stand?\n");
+  printf("Press H to hit, press S to stand.\n");
+  char c = ' ';
+  cin >> c;
+  char* ref = &c;
+  return ref;
 }

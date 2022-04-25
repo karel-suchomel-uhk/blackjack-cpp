@@ -37,8 +37,8 @@ void Deck::printDeck() {
   }
 }
 
-Card Deck::drawACard() {
-  Card topCard = deck.front();
+Card& Deck::drawACard() {
+  Card &topCard = deck.front();
   deck.erase(deck.begin());
   return topCard;
 }
