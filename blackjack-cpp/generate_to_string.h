@@ -1,5 +1,12 @@
-// workaround for old msvc preprocessor:
-// https://stackoverflow.com/questions/5134523/msvc-doesnt-expand-va-args-correctly
+//
+//
+//
+// This is used for converting enums to string. Not written by me
+// source: https://stackoverflow.com/questions/5093460/how-to-convert-an-enum-type-variable-to-a-string
+//
+//
+//
+
 #define ETS_EXP(x) x
 
 #define ETS_CASE(e, x)                                                         \

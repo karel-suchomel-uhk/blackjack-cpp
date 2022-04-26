@@ -17,6 +17,7 @@ void Deck::initDeck() {
 //  printDeck();
 }
 
+// Preemptively clears deck and then populates it with card in order and shuffle them
 void Deck::shuffleDeck() {
   deck.clear();
   for (Card::Value i = Card::Value::Begin; i != Card::Value::End; ++i) {
@@ -38,6 +39,7 @@ void Deck::printDeck() {
   }
 }
 
+// Get a card from the top of a deck. Used for dealing cards.
 Card Deck::drawACard(bool isCardFaceUp) {
   Card topCard = deck.front();
   if (!isCardFaceUp){

@@ -11,12 +11,15 @@ Player::Player() = default;
 
 Player::Player(string username) : username(std::move(username)) {}
 
+// For taking a card from a deck
 void Player::hit(Card card) {
   this->hand.push_back(card);
 }
 
+// Stay function, does nothing
 void Player::stand() {}
 
+// Returns the total of player's hand
 int Player::checkHand() {
   int sum = 0;
   for (Card &card: this->hand) {
@@ -28,6 +31,7 @@ int Player::checkHand() {
   return sum;
 }
 
+// Displays player's hand to teh screen
 void Player::printHand() {
   for (Card &card: this->hand) {
     if (card.isFaceUp()){
@@ -42,6 +46,7 @@ const std::string &Player::getUsername() const {
   return username;
 }
 
+// Presents user with game choices. H (hit) / S (stay)
 char Player::presentChoice() {
   printf("Hit or Stand?\n");
   printf("Press H to hit, press S to stand.\n");

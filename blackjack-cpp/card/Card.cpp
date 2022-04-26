@@ -18,6 +18,7 @@ const Card::Value &Card::getCardValue() const {
   return cardValue;
 }
 
+// Returns int value of card enum value
 int Card::getCardIntValue() const {
   int value = 1;
   switch (cardValue) {
@@ -65,6 +66,7 @@ void Card::setCardValue(const Value &cardValueRef) {
   Card::cardValue = cardValueRef;
 }
 
+// Prints a card to the screen
 void Card::printCard() {
   std::string suitString;
   switch (cardSuit) {
@@ -88,6 +90,7 @@ void Card::printCard() {
   printf("%s |\n", suitString.c_str());
 }
 
+// ++ operator for enum iteration
 Card::Suit& operator ++(Card::Suit& e)
 {
   e = Card::Suit(int(e) + 1);

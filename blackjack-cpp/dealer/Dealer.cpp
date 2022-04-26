@@ -9,6 +9,7 @@ Dealer::Dealer(const std::string &username, Deck &deck) : Player(username), deck
 
 Dealer::Dealer() = default;
 
+// Distribute cards to dealer himself and current players.
 void Dealer::dealCards(std::vector<Player> &players) {
   int round = 1;
   while(round != 3){
@@ -27,6 +28,7 @@ Deck &Dealer::getDeck() {
   return deck;
 }
 
+// Flips the second card of dealer's hand.
 void Dealer::flipCard(){
   for (Card &card: this->hand) {
     if (!card.isFaceUp()){

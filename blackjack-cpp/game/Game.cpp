@@ -15,6 +15,7 @@ void Game::startGame() {
   mainGameLoop();
 }
 
+// Initializes game objects
 void Game::initialize() {
   GameLibrary::startGame();
   Deck deck = Deck();
@@ -23,6 +24,7 @@ void Game::initialize() {
   initializePlayers();
 }
 
+// Creates players for current game sessions
 void Game::initializePlayers() {
   string numberOfPlayer = "0";
   string *numberOfPlayersRef = &numberOfPlayer;
@@ -50,6 +52,7 @@ void Game::initializePlayers() {
   } while (!isInputNumber || intValue <= 0);
 }
 
+// Game loop
 void Game::mainGameLoop() {
   printf("\nStarting game...\n");
 
@@ -116,6 +119,7 @@ void Game::mainGameLoop() {
   restartGame();
 }
 
+// Check results of current game
 void Game::checkWin() {
   printf("%s's hand: ", dealer.getUsername().c_str());
   printf("%i\n", dealer.checkHand());
@@ -188,6 +192,8 @@ void Game::setDealer(Dealer dealerRef) {
   this->dealer = std::move(dealerRef);
 }
 
+// Dialog displayed at the end of a game, where user chooses whether he
+// wants to play again, create completely new game or exit the game
 void Game::restartGame() {
   char choice = ' ';
 
