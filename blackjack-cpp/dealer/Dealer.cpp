@@ -27,17 +27,8 @@ Deck &Dealer::getDeck() {
   return deck;
 }
 
-bool Dealer::isBusted() const {
-  return busted;
-}
-
-void Dealer::setBusted(bool bustedRef) {
-  Dealer::busted = bustedRef;
-}
-
 void Dealer::flipCard(){
   for (Card &card: this->hand) {
-    std::cout << "Card Before: " << card.isFaceUp();
     if (!card.isFaceUp()){
       card.setFaceUp(true);
     }

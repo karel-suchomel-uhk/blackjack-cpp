@@ -12,12 +12,13 @@ Deck::Deck() {
 }
 
 void Deck::initDeck() {
-  cout << "deck init" << endl;
+  printf("Deck created\n");
   shuffleDeck();
 //  printDeck();
 }
 
 void Deck::shuffleDeck() {
+  deck.clear();
   for (Card::Value i = Card::Value::Begin; i != Card::Value::End; ++i) {
     for (Card::Suit j = Card::Suit::Begin; j != Card::Suit::End; ++j) {
       Card card(j, i);

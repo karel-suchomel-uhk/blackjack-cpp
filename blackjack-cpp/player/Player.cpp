@@ -42,10 +42,6 @@ const std::string &Player::getUsername() const {
   return username;
 }
 
-void Player::setUsername(const std::string &usernameRef) {
-  Player::username = usernameRef;
-}
-
 char Player::presentChoice() {
   printf("Hit or Stand?\n");
   printf("Press H to hit, press S to stand.\n");
@@ -57,4 +53,17 @@ char Player::presentChoice() {
 
 const vector<Card> &Player::getHand() const {
   return hand;
+}
+
+bool Player::isBusted() const {
+  return busted;
+}
+
+void Player::setBusted(bool bustedRef) {
+  Player::busted = bustedRef;
+}
+
+void Player::resetPlayerState() {
+  this->busted = false;
+  this->hand.clear();
 }

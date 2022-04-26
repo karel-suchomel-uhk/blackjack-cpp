@@ -5,8 +5,9 @@
 #include <deck/Deck.h>
 
 class Player{
-    std::string username;
   protected:
+    std::string username;
+    bool busted = false;
     std::vector<Card> hand;
 
   public:
@@ -20,8 +21,11 @@ class Player{
     virtual void printHand();
     char presentChoice();
     const std::string &getUsername() const;
+    void resetPlayerState();
 
     const std::vector<Card> &getHand() const;
 
-    void setUsername(const std::string &username);
+    bool isBusted() const;
+
+    void setBusted(bool busted);
 };

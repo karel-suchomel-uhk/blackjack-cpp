@@ -28,6 +28,6 @@ class Game: public GameLibrary {
     explicit Game(const std::string &name);
 
     void startGame() override;
-
+    void restartGame();
     void setDealer(Dealer dealer);
 };

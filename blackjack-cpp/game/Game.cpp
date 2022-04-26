@@ -52,8 +52,11 @@ void Game::initializePlayers() {
 
 void Game::mainGameLoop() {
   printf("\nStarting game...\n");
+
+  // Deal card to all players and the dealer himself.
   dealer.dealCards(players);
 
+  // Switching turns for all players. Each player decides, if he wants to Hit or Stay.
   for (Player& player: players) {
     printf("\n******* %s's turn *******\n", player.getUsername().c_str());
     printf("\n%s's hand: ", player.getUsername().c_str());
@@ -74,6 +77,7 @@ void Game::mainGameLoop() {
           }
           player.hit(drawnCard);
           if (player.checkHand() > 21){
+            player.setBusted(true);
             printf("%s: ", player.getUsername().c_str());
             printf("BUST \n");
           }
@@ -90,6 +94,10 @@ void Game::mainGameLoop() {
     choice = ' ';
     printf("******* End of %s's turn *******\n", player.getUsername().c_str());
   }
+
+  // Ending current game by flipping dealers card and checking
+  // if his hand total less than 17, if that's the case dealer draws
+  // a card until his total is over 17
   printf("\n\n******* End of Game *******\n\n");
   dealer.flipCard();
   while (dealer.checkHand() < 17){
@@ -100,7 +108,12 @@ void Game::mainGameLoop() {
   }
 
   printf("Results: \n");
+
+  // Checking results
   checkWin();
+
+  // Offering for restarting a game or creating a brand new one.
+  restartGame();
 }
 
 void Game::checkWin() {
@@ -108,6 +121,11 @@ void Game::checkWin() {
   printf("%i\n", dealer.checkHand());
   dealer.printHand();
   int dealersHand = dealer.checkHand();
+  for (Player& player: players) {
+    if (player.isBusted()){
+      printf("%s BUSTED!!", player.getUsername().c_str());
+    }
+  }
   if (dealer.isBusted()){
     printf("Dealer BUSTED!!");
   }else{
@@ -124,14 +142,6 @@ void Game::checkWin() {
         // PlAYERS HAND EQUAL 21 -> BLACKJACK
         printf("%s: ", player.getUsername().c_str());
         printf("BLACKJACK!!! \n");
-      }else if (playerHand > 21){
-        // PlAYERS HAND OVER 21 -> BUST
-        printf("%s: ", player.getUsername().c_str());
-        printf("BUST \n");
-      }else if(dealersHand > 21){
-        // DEALERS HAND OVER 21 -> BUST
-        printf("Dealer: ");
-        printf("BUST \n");
       }else if(playerHand > dealersHand && playerHand != 21) {
         // PlAYERS HAND OVER DEALERS -> WIN
         printf("%s: ", player.getUsername().c_str());
@@ -143,7 +153,6 @@ void Game::checkWin() {
       }
     }
   }
-
 }
 
 void Game::createPlayer() {
@@ -177,4 +186,35 @@ bool Game::isNumber(const string &s) {
 
 void Game::setDealer(Dealer dealerRef) {
   this->dealer = std::move(dealerRef);
+}
+
+void Game::restartGame() {
+  char choice = ' ';
+
+  do {
+    printf("\n\n Press R for to restart, N for a new game or Q for exit: ");
+    cin >> choice;
+    choice = toupper(choice);
+    if (choice == 'R'){
+      printf(("\n********* Restarting game *********\n"));
+      dealer.getDeck().initDeck();
+      dealer.resetPlayerState();
+      for (Player& player: players) {
+        player.resetPlayerState();
+      }
+      mainGameLoop();
+    }else if(choice == 'N'){
+      printf(("\n********* Starting a new game *********\n"));
+      dealer.getDeck().initDeck();
+      dealer.resetPlayerState();
+      players.clear();
+      initializePlayers();
+      mainGameLoop();
+    }else if (choice == 'Q'){
+      players.clear();
+      printf("\n*********** Bey, come back later :( ************");
+    }else {
+      printf("Wrong input, try again!!\n");
+    }
+  } while (choice != 'R' || choice != 'N' || choice != 'Q');
 }

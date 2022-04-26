@@ -10,12 +10,12 @@
 class Deck {
     std::vector<Card> deck;
 
-    void initDeck();
     void shuffleDeck();
+    void printDeck();
 
   public:
+    void initDeck();
     Deck();
-    void printDeck();
     Card drawACard(bool isCardFaceUp = true);
     bool isDeckEmpty();
 };
