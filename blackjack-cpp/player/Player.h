@@ -6,6 +6,7 @@
 
 class Player{
     std::string username;
+  protected:
     std::vector<Card> hand;
 
   public:
@@ -16,9 +17,11 @@ class Player{
     void hit(Card card);
     void stand();
     int checkHand();
-    void printHand();
-    char* presentChoice();
+    virtual void printHand();
+    char presentChoice();
     const std::string &getUsername() const;
+
+    const std::vector<Card> &getHand() const;
 
     void setUsername(const std::string &username);
 };

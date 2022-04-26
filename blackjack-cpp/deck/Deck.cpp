@@ -37,8 +37,11 @@ void Deck::printDeck() {
   }
 }
 
-Card& Deck::drawACard() {
-  Card &topCard = deck.front();
+Card Deck::drawACard(bool isCardFaceUp) {
+  Card topCard = deck.front();
+  if (!isCardFaceUp){
+    topCard.setFaceUp(false);
+  }
   deck.erase(deck.begin());
   return topCard;
 }

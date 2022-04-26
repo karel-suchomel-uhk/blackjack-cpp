@@ -99,3 +99,11 @@ Card::Value& operator ++(Card::Value& e)
   e = Card::Value(int(e) + 1);
   return e;
 }
+
+void Card::setFaceUp(bool faceUpRef) {
+  Card::faceUp = faceUpRef;
+}
+
+bool Card::isFaceUp() const {
+  return faceUp;
+}

@@ -19,16 +19,22 @@ void Player::stand() {}
 
 int Player::checkHand() {
   int sum = 0;
-  for (auto i: this->hand) {
-    sum += i.getCardIntValue();
+  for (Card &card: this->hand) {
+    if (card.isFaceUp()){
+      sum += card.getCardIntValue();
+    }
   }
 
   return sum;
 }
 
 void Player::printHand() {
-  for (Card card: this->hand) {
-    card.printCard();
+  for (Card &card: this->hand) {
+    if (card.isFaceUp()){
+      card.printCard();
+    }else{
+      printf("| XX |\n");
+    }
   }
 }
 
@@ -40,11 +46,15 @@ void Player::setUsername(const std::string &usernameRef) {
   Player::username = usernameRef;
 }
 
-char* Player::presentChoice() {
+char Player::presentChoice() {
   printf("Hit or Stand?\n");
   printf("Press H to hit, press S to stand.\n");
-  char c = ' ';
+  char c;
   cin >> c;
-  char* ref = &c;
-  return ref;
+  char upperCased = toupper(c);
+  return upperCased;
+}
+
+const vector<Card> &Player::getHand() const {
+  return hand;
 }

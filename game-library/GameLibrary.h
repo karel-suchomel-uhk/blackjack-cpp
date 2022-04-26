@@ -17,4 +17,6 @@ class GameLibrary {
     const std::string &getNameOfTheGame() const;
 
     void setNameOfTheGame(const std::string &nameOfTheGame);
+
+    virtual void mainGameLoop();
 };

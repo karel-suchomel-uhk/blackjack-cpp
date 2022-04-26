@@ -34,10 +34,15 @@ class Card {
 
     void printCard();
 
+    bool isFaceUp() const;
+
+    void setFaceUp(bool faceUp);
+
     friend Suit &operator++(Suit &e);
 
     friend Value &operator++(Value &e);
   private:
     Suit cardSuit;
     Value cardValue;
+    bool faceUp = true;
 };

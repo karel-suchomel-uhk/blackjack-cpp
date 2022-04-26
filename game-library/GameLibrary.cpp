@@ -16,5 +16,9 @@ void GameLibrary::setNameOfTheGame(const std::string &nameOfTheGame) {
 }
 
 void GameLibrary::startGame() {
-  cout << "Starting game..." << endl;
+  printf("Starting game...\n");
+}
+
+void GameLibrary::mainGameLoop() {
+  printf("\nMissing main game loop\n");
 }

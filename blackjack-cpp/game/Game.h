@@ -20,7 +20,7 @@ class Game: public GameLibrary {
     void printPlayers();
     void initializePlayers();
     static bool isNumber(const std::string& str);
-    void mainGameLoop();
+    void mainGameLoop() override;
     void checkWin();
 
   public:

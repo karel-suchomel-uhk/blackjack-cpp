@@ -6,6 +6,8 @@
 
 class Dealer: public Player{
     Deck deck;
+    bool busted = false;
+    bool hasBlackjack = false;
   public:
     Dealer();
     Dealer(const std::string &username, Deck &deck);
@@ -13,4 +15,10 @@ class Dealer: public Player{
     void dealCards(std::vector<Player> &playersRef);
 
     Deck &getDeck();
+
+    bool isBusted() const;
+
+    void setBusted(bool busted);
+
+    void flipCard();
 };

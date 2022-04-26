@@ -16,6 +16,6 @@ class Deck {
   public:
     Deck();
     void printDeck();
-    Card& drawACard();
+    Card drawACard(bool isCardFaceUp = true);
     bool isDeckEmpty();
 };

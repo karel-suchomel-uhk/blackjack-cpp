@@ -5,7 +5,6 @@
 #include <game/Game.h>
 #include <deck/Deck.h>
 #include <utility>
-#include <stdlib.h>
 
 using namespace std;
 
@@ -55,32 +54,96 @@ void Game::mainGameLoop() {
   printf("\nStarting game...\n");
   dealer.dealCards(players);
 
-  int currentPlayer = 0;
   for (Player& player: players) {
-    currentPlayer++;
     printf("\n******* %s's turn *******\n", player.getUsername().c_str());
     printf("\n%s's hand: ", player.getUsername().c_str());
     printf("%i\n", player.checkHand());
     player.printHand();
-    char choice = ' ';
-    char* choiceRef = &choice;
-    while(player.checkHand() < 21 && *choiceRef != 'S' || player.checkHand() < 21 && *choiceRef != 's'){
-      choiceRef = player.presentChoice();
-      if (*choiceRef == 'H' || *choiceRef == 'h'){
+    char choice;
 
-        player.hit(dealer.getDeck().drawACard());
-      }else if(*choiceRef == 'S' || *choiceRef == 's'){
-        player.stand();
-      }else{
-        printf("Invalid input, enter only H or S.");
+    if (player.checkHand() == 21){
+      printf("%s: ", player.getUsername().c_str());
+      printf("BLACKJACK!!! \n");
+    }else{
+      while(player.checkHand() <= 21 && choice != 'S') {
+        choice = player.presentChoice();
+        if (choice == 'H') {
+          Card drawnCard = dealer.getDeck().drawACard();
+          if (drawnCard.getCardIntValue() == 11) {
+            drawnCard.setCardValue(Card::Value::Begin);
+          }
+          player.hit(drawnCard);
+          if (player.checkHand() > 21){
+            printf("%s: ", player.getUsername().c_str());
+            printf("BUST \n");
+          }
+        } else if (choice == 'S') {
+          player.stand();
+        } else {
+          printf("Invalid input, enter only H or S.");
+        }
+        printf("\n%s's hand: ", player.getUsername().c_str());
+        printf("%i\n", player.checkHand());
       }
+    }
+
+    choice = ' ';
+    printf("******* End of %s's turn *******\n", player.getUsername().c_str());
+  }
+  printf("\n\n******* End of Game *******\n\n");
+  dealer.flipCard();
+  while (dealer.checkHand() < 17){
+    dealer.hit(dealer.getDeck().drawACard());
+  }
+  if (dealer.checkHand() > 21){
+    dealer.setBusted(true);
+  }
+
+  printf("Results: \n");
+  checkWin();
+}
+
+void Game::checkWin() {
+  printf("%s's hand: ", dealer.getUsername().c_str());
+  printf("%i\n", dealer.checkHand());
+  dealer.printHand();
+  int dealersHand = dealer.checkHand();
+  if (dealer.isBusted()){
+    printf("Dealer BUSTED!!");
+  }else{
+    for (Player& player: players) {
+      int playerHand = player.checkHand();
       printf("\n%s's hand: ", player.getUsername().c_str());
       printf("%i\n", player.checkHand());
+
+      if (playerHand == dealersHand) {
+        // SAME HAND TOTAL -> PUSH
+        printf("%s: ", player.getUsername().c_str());
+        printf("PUSH \n");
+      }else if(playerHand == 21 && dealersHand != 21){
+        // PlAYERS HAND EQUAL 21 -> BLACKJACK
+        printf("%s: ", player.getUsername().c_str());
+        printf("BLACKJACK!!! \n");
+      }else if (playerHand > 21){
+        // PlAYERS HAND OVER 21 -> BUST
+        printf("%s: ", player.getUsername().c_str());
+        printf("BUST \n");
+      }else if(dealersHand > 21){
+        // DEALERS HAND OVER 21 -> BUST
+        printf("Dealer: ");
+        printf("BUST \n");
+      }else if(playerHand > dealersHand && playerHand != 21) {
+        // PlAYERS HAND OVER DEALERS -> WIN
+        printf("%s: ", player.getUsername().c_str());
+        printf("WIN!! \n");
+      }else if(dealersHand > playerHand){
+        // DEALERS HAND OVER PLAYERS -> LOSE
+        printf("%s: ", player.getUsername().c_str());
+        printf("LOSE !! \n");
+      }
     }
   }
-  printf("******* End of Turn *******\n");
-  while (dealer.checkHand() < 17)
-    dealer.hit(dealer.getDeck().drawACard());
+
 }
 
 void Game::createPlayer() {
@@ -114,8 +177,4 @@ bool Game::isNumber(const string &s) {
 
 void Game::setDealer(Dealer dealerRef) {
   this->dealer = std::move(dealerRef);
-}
-
-void Game::checkWin() {
-
 }
