@@ -24,13 +24,11 @@ class Card {
 
     const Suit &getCardSuit() const;
 
-    void setCardSuit(const Suit &cardSuitRef);
-
     const Value &getCardValue() const;
 
     int getCardIntValue() const;
 
-    void setCardValue(const Value &cardValueRef);
+    void setCardIntValue(int cardIntValue);
 
     void printCard();
 
@@ -44,5 +42,6 @@ class Card {
   private:
     Suit cardSuit;
     Value cardValue;
+    int cardIntValue = 0;
     bool faceUp = true;
 };

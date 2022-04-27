@@ -10,16 +10,66 @@ const Card::Suit &Card::getCardSuit() const {
   return cardSuit;
 }
 
-void Card::setCardSuit(const Suit &cardSuitRef) {
-  Card::cardSuit = cardSuitRef;
-}
-
 const Card::Value &Card::getCardValue() const {
   return cardValue;
 }
 
 // Returns int value of card enum value
+//int Card::getCardIntValue() const {
+
+//};
+
+// Prints a card to the screen
+void Card::printCard() {
+  std::string suitString;
+  switch (cardSuit) {
+    case Suit::HEARTS:
+      suitString = "♥";
+      break;
+    case Suit::DIAMONDS:
+      suitString = "♦";
+      break;
+    case Suit::SPADES:
+      suitString = "♠";
+      break;
+    case Suit::CLUBS:
+      suitString = "♣";
+      break;
+    default:
+      suitString = "♣";
+  }
+
+  printf("| %i", getCardIntValue());
+  printf("%s |\n", suitString.c_str());
+}
+
+void Card::setFaceUp(bool faceUpRef) {
+  Card::faceUp = faceUpRef;
+}
+
+bool Card::isFaceUp() const {
+  return faceUp;
+}
+
+void Card::setCardIntValue(int cardIntValueRef) {
+  Card::cardIntValue = cardIntValueRef;
+}
+
+// ++ operator for enum iteration
+Card::Suit &operator++(Card::Suit &e) {
+  e = Card::Suit(int(e) + 1);
+  return e;
+}
+
+Card::Value &operator++(Card::Value &e) {
+  e = Card::Value(int(e) + 1);
+  return e;
+}
+
 int Card::getCardIntValue() const {
+  if (cardIntValue > 0){
+    return cardIntValue;
+  }
   int value = 1;
   switch (cardValue) {
     case Value::Begin:
@@ -60,53 +110,4 @@ int Card::getCardIntValue() const {
   }
 
   return value;
-};
-
-void Card::setCardValue(const Value &cardValueRef) {
-  Card::cardValue = cardValueRef;
-}
-
-// Prints a card to the screen
-void Card::printCard() {
-  std::string suitString;
-  switch (cardSuit) {
-    case Suit::HEARTS:
-      suitString = "♥";
-      break;
-    case Suit::DIAMONDS:
-      suitString = "♦";
-      break;
-    case Suit::SPADES:
-      suitString = "♠";
-      break;
-    case Suit::CLUBS:
-      suitString = "♣";
-      break;
-    default:
-      suitString = "♣";
-  }
-
-  printf("| %i", getCardIntValue());
-  printf("%s |\n", suitString.c_str());
-}
-
-// ++ operator for enum iteration
-Card::Suit& operator ++(Card::Suit& e)
-{
-  e = Card::Suit(int(e) + 1);
-  return e;
-}
-
-Card::Value& operator ++(Card::Value& e)
-{
-  e = Card::Value(int(e) + 1);
-  return e;
-}
-
-void Card::setFaceUp(bool faceUpRef) {
-  Card::faceUp = faceUpRef;
-}
-
-bool Card::isFaceUp() const {
-  return faceUp;
 }

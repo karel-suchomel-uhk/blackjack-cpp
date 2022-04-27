@@ -18,4 +18,5 @@ class Deck {
     Deck();
     Card drawACard(bool isCardFaceUp = true);
     bool isDeckEmpty();
+    int size();
 };

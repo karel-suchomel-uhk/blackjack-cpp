@@ -17,7 +17,9 @@ void Player::hit(Card card) {
 }
 
 // Stay function, does nothing
-void Player::stand() {}
+void Player::stand() {
+  setStanding(true);
+}
 
 // Returns the total of player's hand
 int Player::checkHand() {
@@ -70,5 +72,22 @@ void Player::setBusted(bool bustedRef) {
 
 void Player::resetPlayerState() {
   this->busted = false;
+  this->standing = false;
   this->hand.clear();
+}
+
+bool Player::isStanding() const {
+  return standing;
+}
+
+void Player::setStanding(bool standRef) {
+  Player::standing = standRef;
+}
+
+bool Player::getHasBlackjack() const {
+  return hasBlackjack;
+}
+
+void Player::setHasBlackjack(bool hasBlackjackRef) {
+  Player::hasBlackjack = hasBlackjackRef;
 }

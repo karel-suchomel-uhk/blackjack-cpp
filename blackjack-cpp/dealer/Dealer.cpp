@@ -15,7 +15,11 @@ void Dealer::dealCards(std::vector<Player> &players) {
   while(round != 3){
     this->hit(deck.drawACard(round == 1));
     for (Player& player: players) {
-      player.hit(deck.drawACard());
+      Card card = deck.drawACard();
+      if (player.checkHand() == 11){
+        card.setCardIntValue(1);
+      }
+      player.hit(card);
     }
     round++;
   }

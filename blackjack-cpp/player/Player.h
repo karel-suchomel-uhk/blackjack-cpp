@@ -8,6 +8,8 @@ class Player{
   protected:
     std::string username;
     bool busted = false;
+    bool standing = false;
+    bool hasBlackjack = false;
     std::vector<Card> hand;
 
   public:
@@ -22,10 +24,13 @@ class Player{
     char presentChoice();
     const std::string &getUsername() const;
     void resetPlayerState();
-
     const std::vector<Card> &getHand() const;
-
     bool isBusted() const;
-
     void setBusted(bool busted);
+    bool isStanding() const;
+    void setStanding(bool stay);
+
+    bool getHasBlackjack() const;
+
+    void setHasBlackjack(bool hasBlackjack);
 };

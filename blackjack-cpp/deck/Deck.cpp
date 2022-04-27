@@ -52,3 +52,7 @@ Card Deck::drawACard(bool isCardFaceUp) {
 bool Deck::isDeckEmpty() {
   return deck.empty();
 }
+
+int Deck::size(){
+  return deck.size();
+}
