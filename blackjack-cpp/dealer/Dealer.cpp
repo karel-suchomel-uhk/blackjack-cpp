@@ -23,9 +23,6 @@ void Dealer::dealCards(std::vector<Player> &players) {
     }
     round++;
   }
-  printf("\n%s's hand: ", getUsername().c_str());
-  printf("%i\n", checkHand());
-  printHand();
 }
 
 Deck &Dealer::getDeck() {

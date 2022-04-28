@@ -42,7 +42,6 @@ void Game::initializePlayers() {
         for (int i = 0; i < intValue; i++) {
           createPlayer();
         }
-        printPlayers();
       } else {
         printf("At least 1 player must be input!!\n");
       }
@@ -54,32 +53,41 @@ void Game::initializePlayers() {
 
 // Game loop
 void Game::mainGameLoop() {
+  printPlayers();
   int turns = 0;
+  int round = 1;
   printf("\nStarting game...\n");
-
+  collectBets();
   // Deal card to all players and the dealer himself.
   dealer.dealCards(players);
 
   // Switching turns for all players. Each player decides, if he wants to Hit or Stay.
-  while(turns < players.size()) {
+  while (turns < players.size()) {
+    printf("\n%s's hand: ", dealer.getUsername().c_str());
+    printf("%i\n", dealer.checkHand());
+    dealer.printHand();
     printf("________________________________\n");
-    printf("           %i. round            \n", turns + 1);
-    printf("________________________________\n\n");
+    printf("           %i. round            \n", round);
+    printf("________________________________\n");
 
     for (Player &player: players) {
       if (!player.isStanding() && !player.isBusted() && !player.getHasBlackjack()) {
         char choice;
-        printf("\n******* %s's turn *******\n", player.getUsername().c_str());
+        printf("\n\n******* %s's turn *******\n", player.getUsername().c_str());
         printf("\n%s's hand: ", player.getUsername().c_str());
-        printf("%i\n", player.checkHand());
+        printf("%i, ", player.checkHand());
+        printf("bet: %g\n", player.getBetAmount());
         player.printHand();
+        // If user starts with blackjack, skip his turns
         if (player.checkHand() == 21) {
           player.setHasBlackjack(true);
-          printf("%s: ", player.getUsername().c_str());
-          printf("BLACKJACK!!! \n");
+          double wonAmount = player.getBetAmount() * 1.5;
+          printf("%s hit a BLACKJACK", player.getUsername().c_str());
+          printf(", won $%g", wonAmount);
+          player.getWallet().addToBalance(wonAmount);
           turns++;
         } else {
-          choice = player.presentChoice();
+          choice = presentChoice();
           if (choice == 'H') {
             Card drawnCard = dealer.getDeck().drawACard();
             if (drawnCard.getCardIntValue() == 11) {
@@ -96,13 +104,18 @@ void Game::mainGameLoop() {
           printf("\n%s's hand: ", player.getUsername().c_str());
           printf("%i\n", player.checkHand());
           player.printHand();
+
+          // If user draws a card and busts, skip his turn.
           if (player.checkHand() > 21) {
             player.setBusted(true);
-            printf("%s BUSTED\n", player.getUsername().c_str());
+            printf("%s BUSTED", player.getUsername().c_str());
+            printf(", lost $%g\n", player.getBetAmount());
             turns++;
-          }else if (player.checkHand() == 21){
+          } else if (player.checkHand() == 21) {
+            double wonAmount = player.getBetAmount() * 1.5;
             printf("%s hit a BLACKJACK", player.getUsername().c_str());
-            printf("BLACKJACK!!! \n");
+            printf(", won $%g", wonAmount);
+            player.getWallet().addToBalance(wonAmount);
             turns++;
           }
         }
@@ -110,6 +123,7 @@ void Game::mainGameLoop() {
 //      printf("******* End of %s's turn *******\n", player.getUsername().c_str());
 
     }
+    round++;
   }
 
   // Ending current game by flipping dealers card and checking
@@ -122,6 +136,14 @@ void Game::mainGameLoop() {
   }
   if (dealer.checkHand() > 21) {
     dealer.setBusted(true);
+    for (Player &player: players) {
+      if (!player.isBusted()) {
+        printf("%s get his", player.getUsername().c_str());
+        printf(" $%g back\n", player.getBetAmount());
+        player.getWallet().addToBalance(player.getBetAmount());
+        turns++;
+      }
+    }
   }
 
   printf("Results: \n");
@@ -153,27 +175,34 @@ void Game::checkWin() {
   } else {
     for (Player &player: players) {
       int playerHand = player.checkHand();
-      if (!player.isBusted()){
-      printf("\n%s's hand: ", player.getUsername().c_str());
-      printf("%i\n", player.checkHand());
+      if (!player.isBusted()) {
+        printf("\n%s's hand: ", player.getUsername().c_str());
+        printf("%i\n", player.checkHand());
       }
+      if (!player.getHasBlackjack()) {
+        if (playerHand == dealersHand) {
+          // SAME HAND TOTAL -> PUSH
+          printf("%s hit a PUSH!! ", player.getUsername().c_str());
+          printf("Getting his %g back", player.getBetAmount());
+          player.getWallet().addToBalance(player.getBetAmount());
+        } else if (playerHand == 21 && dealersHand != 21) {
+          // PlAYERS HAND EQUAL 21 -> BLACKJACK
+          double wonAmount = player.getBetAmount() * 1.5;
+          printf("%s hit a BLACKJACK", player.getUsername().c_str());
+          printf(", won $%g", wonAmount);
+          player.getWallet().addToBalance(wonAmount);
+        } else if (playerHand > dealersHand && playerHand < 21) {
+          // PlAYERS HAND OVER DEALERS -> WIN
 
-      if (playerHand == dealersHand) {
-        // SAME HAND TOTAL -> PUSH
-        printf("%s: ", player.getUsername().c_str());
-        printf("PUSH \n");
-      } else if (playerHand == 21 && dealersHand != 21) {
-        // PlAYERS HAND EQUAL 21 -> BLACKJACK
-        printf("%s: ", player.getUsername().c_str());
-        printf("BLACKJACK!!! \n");
-      } else if (playerHand > dealersHand && playerHand < 21) {
-        // PlAYERS HAND OVER DEALERS -> WIN
-        printf("%s: ", player.getUsername().c_str());
-        printf("WIN!! \n");
-      } else if (dealersHand > playerHand) {
-        // DEALERS HAND OVER PLAYERS -> LOSE
-        printf("%s: ", player.getUsername().c_str());
-        printf("LOSE !! \n");
+          double wonAmount = player.getBetAmount() * 1.5;
+          printf("%s WON!! Winnings are ", player.getUsername().c_str());
+          printf("$%g \n", wonAmount);
+          player.getWallet().addToBalance(wonAmount);
+        } else if (dealersHand > playerHand) {
+          // DEALERS HAND OVER PLAYERS -> LOSE
+          printf("%s LOST!! ", player.getUsername().c_str());
+          printf("Lost amount is $%g\n", player.getBetAmount());
+        }
       }
     }
   }
@@ -183,7 +212,7 @@ void Game::createPlayer() {
   string userName;
   printf("Select player's name: ");
   cin >> userName;
-  Player p = Player(userName);
+  Player p = Player(userName, Wallet(5000.00));
   players.push_back(p);
 }
 
@@ -192,24 +221,39 @@ void Game::printPlayers() {
   printf("\n");
   for (Player &player: players) {
     printf("%d. ", index);
-    printf("%s\n", player.getUsername().c_str());
+    printf("%s, balance: ", player.getUsername().c_str());
+    printf("$%g\n", player.getWallet().getBalance());
     index++;
   }
 }
 
-bool Game::isNumber(const string &s) {
-  bool hitDecimal = false;
-  for (char c: s) {
-    if (c == '.' && !hitDecimal) // 2 '.' in string mean invalid
-      hitDecimal = true; // first hit here, we forgive and skip
-    else if (!isdigit(c))
-      return false; // not ., not
-  }
-  return true;
-}
-
 void Game::setDealer(Dealer dealerRef) {
   this->dealer = std::move(dealerRef);
+}
+
+// Prompts players for their bets
+void Game::collectBets() {
+  printf("********* Collecting bets **********\n");
+  for (Player &player: players) {
+    double bet = 0.0;
+    printf("%s's bet: ", player.getUsername().c_str());
+    cin >> bet;
+    player.getWallet().subtractFromBalance(bet);
+    cout << "Balance: " << player.getWallet().getBalance() << endl;
+    player.setBetAmount(bet);
+    printf("__________________________________\n");
+  }
+  printf("\n");
+}
+
+// Presents user with game choices. H (hit) / S (stay)
+char Game::presentChoice() {
+  printf("Hit or Stand?\n");
+  printf("Press H to hit, press S to stand.\n");
+  char c;
+  cin >> c;
+  char upperCased = toupper(c);
+  return upperCased;
 }
 
 // Dialog displayed at the end of a game, where user chooses whether he

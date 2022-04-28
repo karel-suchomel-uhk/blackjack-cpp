@@ -21,4 +21,4 @@ add_executable(
         blackjack-cpp/player/Player.cpp
         blackjack-cpp/player/Player.h
         blackjack-cpp/generate_to_string.h
-        main.cpp game-library/GameLibrary.cpp game-library/GameLibrary.h blackjack-cpp/dealer/Dealer.cpp blackjack-cpp/dealer/Dealer.h)
+        main.cpp game-library/GameLibrary.cpp game-library/GameLibrary.h blackjack-cpp/dealer/Dealer.cpp blackjack-cpp/dealer/Dealer.h blackjack-cpp/wallet/Wallet.cpp blackjack-cpp/wallet/Wallet.h game-library/UtilFunctions.cpp game-library/UtilFunctions.h)

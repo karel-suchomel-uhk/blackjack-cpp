@@ -7,16 +7,18 @@
 #include <utility>
 using namespace std;
 
-Player::Player() = default;
+Player::Player(const string &username, const Wallet &wallet) : username(username), wallet(wallet) {}
 
-Player::Player(string username) : username(std::move(username)) {}
+Player::Player(const string &username) : username(username) {}
+
+Player::Player() {}
 
 // For taking a card from a deck
 void Player::hit(Card card) {
   this->hand.push_back(card);
 }
 
-// Stay function, does nothing
+// For skipping user round without taking a new card.
 void Player::stand() {
   setStanding(true);
 }
@@ -48,16 +50,6 @@ const std::string &Player::getUsername() const {
   return username;
 }
 
-// Presents user with game choices. H (hit) / S (stay)
-char Player::presentChoice() {
-  printf("Hit or Stand?\n");
-  printf("Press H to hit, press S to stand.\n");
-  char c;
-  cin >> c;
-  char upperCased = toupper(c);
-  return upperCased;
-}
-
 const vector<Card> &Player::getHand() const {
   return hand;
 }
@@ -73,6 +65,7 @@ void Player::setBusted(bool bustedRef) {
 void Player::resetPlayerState() {
   this->busted = false;
   this->standing = false;
+  this->hasBlackjack = false;
   this->hand.clear();
 }
 
@@ -90,4 +83,16 @@ bool Player::getHasBlackjack() const {
 
 void Player::setHasBlackjack(bool hasBlackjackRef) {
   Player::hasBlackjack = hasBlackjackRef;
+}
+
+double Player::getBetAmount() const {
+  return betAmount;
+}
+
+void Player::setBetAmount(double betAmountRef) {
+  Player::betAmount = betAmountRef;
+}
+
+Wallet &Player::getWallet() {
+  return wallet;
 }

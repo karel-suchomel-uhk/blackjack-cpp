@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <GameLibrary.h>
+#include <UtilFunctions.h>
 #include <player/Player.h>
 #include <dealer/Dealer.h>
 #include <cctype>
@@ -19,14 +20,14 @@ class Game: public GameLibrary {
     void initialize();
     void printPlayers();
     void initializePlayers();
-    static bool isNumber(const std::string& str);
     void mainGameLoop() override;
     void checkWin();
+    char presentChoice();
+    void collectBets();
 
   public:
 
     explicit Game(const std::string &name);
-
     void startGame() override;
     void restartGame();
     void setDealer(Dealer dealer);
