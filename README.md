@@ -22,5 +22,6 @@ I have decided to do a Blackjack game for my final project. This document serves
 1. After you run the application, you will be presented options of how many players are going to play. Enter any number higher than 0, and you will be taken to the next step.
 2. Next you are going to be prompted for usernames for every player that you have chosen.
 3. After you enter all usernames, the game will start automatically.
-4. Players take a turn. In every turn player can either Hit by pressing the [H] key or Stay by  the [S] key. The player's turn is ended when his hand total is 21 or higher or if he chooses to Stay.
-5. After all players end their turn, results will be printed on the screen, after which a user can decide whether he what to restart the game [R], create a new one [N], or quit the game completely [Q].
+4. Each game starts by collecting bets. Every player is going to be prompted to enter the amount they want to bet and after all players entered their bet, the dealer will deal cards to every player.
+5. Players take a turn. In every turn player can either Hit by pressing the [H] key or Stay by  the [S] key. The player's turn is ended when his hand total is 21 or higher or if he chooses to Stay.
+6. After all players end their turn, results will be printed on the screen, after which a user can decide whether he what to restart the game [R], create a new one [N], or quit the game completely [Q].
