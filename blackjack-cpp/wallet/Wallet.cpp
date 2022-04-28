@@ -14,7 +14,6 @@ void Wallet::addToBalance(double amount) {
 void Wallet::subtractFromBalance(double amount) {
   double newBalance = roundUp(balance - amount, 2);
   setBalance(newBalance);
-  std::cout << "After set: " << getBalance() << std::endl;
 }
 
 void Wallet::setBalance(double balanceRef) {

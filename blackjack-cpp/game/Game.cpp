@@ -183,7 +183,7 @@ void Game::checkWin() {
         if (playerHand == dealersHand) {
           // SAME HAND TOTAL -> PUSH
           printf("%s hit a PUSH!! ", player.getUsername().c_str());
-          printf("Getting his %g back", player.getBetAmount());
+          printf("Getting his $%g back", player.getBetAmount());
           player.getWallet().addToBalance(player.getBetAmount());
         } else if (playerHand == 21 && dealersHand != 21) {
           // PlAYERS HAND EQUAL 21 -> BLACKJACK
