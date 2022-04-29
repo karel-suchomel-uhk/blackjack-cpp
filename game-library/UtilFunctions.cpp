@@ -4,6 +4,8 @@
 
 #include "UtilFunctions.h"
 #include <cmath>
+#include <vector>
+#include <iostream>
 
 double roundUp(double value, int decimal_places) {
   const double multiplier = pow(10.0, decimal_places);
