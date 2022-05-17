@@ -40,7 +40,7 @@ void Game::initializePlayers() {
 
       if (intValue > 0) {
         for (int i = 0; i < intValue; i++) {
-          createPlayer();
+          createPlayer(i+1);
         }
       } else {
         printf("At least 1 player must be input!!\n");
@@ -49,6 +49,31 @@ void Game::initializePlayers() {
       printf("Please enter a valid number!!\n");
     }
   } while (!isInputNumber || intValue <= 0);
+}
+
+// Prompts players for their bets
+void Game::collectBets() {
+  printf("********* Collecting bets **********\n");
+  for (Player &player: players) {
+    double bet = 0.0;
+    bool validBet = false;
+    do {
+      printf("%s's bet: ", player.getUsername().c_str());
+      cin >> bet;
+      if (bet > player.getWallet().getBalance()) {
+        printf("Entered bet is larger than a player's balance. Please enter a valid amount!!\n");
+      } else if (bet <= 0.0) {
+        printf("Bet must be higher than 0. Please enter a valid amount!!\n");
+      } else {
+        player.getWallet().subtractFromBalance(bet);
+        printf("Balance: $%g\n", player.getWallet().getBalance());
+        player.setBetAmount(bet);
+        validBet = true;
+      }
+    } while (!validBet);
+    printf("__________________________________\n");
+  }
+  printf("\n");
 }
 
 // Game loop
@@ -60,15 +85,17 @@ void Game::mainGameLoop() {
   collectBets();
   // Deal card to all players and the dealer himself.
   dealer.dealCards(players);
+  clear();
 
   // Switching turns for all players. Each player decides, if he wants to Hit or Stay.
   while (turns < players.size()) {
-    printf("\n%s's hand: ", dealer.getUsername().c_str());
-    printf("%i\n", dealer.checkHand());
+    printf("\n\n********* Dealer's hand *********\n");
+    printf("Hand total: %i\n", dealer.checkHand());
     dealer.printHand();
-    printf("________________________________\n");
+    printf("\n*********************************\n\n");
+    printf("__________________________________\n");
     printf("           %i. round            \n", round);
-    printf("________________________________\n");
+    printf("__________________________________\n");
 
     for (Player &player: players) {
       if (!player.isStanding() && !player.isBusted() && !player.getHasBlackjack()) {
@@ -137,9 +164,9 @@ void Game::mainGameLoop() {
   if (dealer.checkHand() > 21) {
     dealer.setBusted(true);
   }
-  printf("\n________________________________\n");
+  printf("\n__________________________________\n");
   printf("Results: \n");
-  printf("________________________________\n");
+  printf("__________________________________\n");
 
   // Checking results
   checkWin();
@@ -209,9 +236,9 @@ void Game::checkWin() {
   }
 }
 
-void Game::createPlayer() {
+void Game::createPlayer(int index) {
   string userName;
-  printf("Select player's name: ");
+  printf("Select the name of the %d. player: ", index);
   cin >> userName;
   Player p = Player(userName, Wallet(5000.00));
   players.push_back(p);
@@ -233,31 +260,6 @@ void Game::printPlayers() {
 
 void Game::setDealer(Dealer dealerRef) {
   this->dealer = std::move(dealerRef);
-}
-
-// Prompts players for their bets
-void Game::collectBets() {
-  printf("********* Collecting bets **********\n");
-  for (Player &player: players) {
-    double bet = 0.0;
-    bool validBet = false;
-    do {
-      printf("%s's bet: ", player.getUsername().c_str());
-      cin >> bet;
-      if (bet > player.getWallet().getBalance()) {
-        printf("Entered bet is larger than a player's balance. Please enter a valid amount!!\n");
-      } else if (bet <= 0.0) {
-        printf("Bet must be higher than 0. Please enter a valid amount!!\n");
-      } else {
-        player.getWallet().subtractFromBalance(bet);
-        printf("Balance: $%g\n", player.getWallet().getBalance());
-        player.setBetAmount(bet);
-        validBet = true;
-      }
-    } while (!validBet);
-    printf("__________________________________\n");
-  }
-  printf("\n");
 }
 
 // Presents user with game choices. H (hit) / S (stay)
@@ -285,7 +287,6 @@ void Game::restartGame() {
     }
   }
 
-  cout << players.empty() << endl;
   // If no players are remaining, end the game, otherwise present user with choices.
   if (!players.empty()) {
     char choice = ' ';
@@ -297,6 +298,7 @@ void Game::restartGame() {
       if (choice == 'R') {
         validChoice = true;
         printf(("\n********* Restarting game *********\n"));
+        clear();
         dealer.getDeck().initDeck();
         dealer.resetPlayerState();
 
@@ -304,6 +306,7 @@ void Game::restartGame() {
       } else if (choice == 'N') {
         validChoice = true;
         printf(("\n********* Starting a new game *********\n"));
+        clear();
         dealer.getDeck().initDeck();
         dealer.resetPlayerState();
         players.clear();
@@ -313,6 +316,7 @@ void Game::restartGame() {
         validChoice = true;
         players.clear();
         printf("\n*********** Bey, come back later :( ************");
+        clear();
         return;
       } else {
         printf("Wrong input, try again!!\n");
@@ -329,6 +333,7 @@ void Game::restartGame() {
       if (choice == 'Y') {
         validChoice = true;
         printf(("\n********* Starting a new game *********\n"));
+        clear();
         dealer.getDeck().initDeck();
         dealer.resetPlayerState();
         players.clear();
@@ -338,6 +343,7 @@ void Game::restartGame() {
         validChoice = true;
         players.clear();
         printf("\n*********** Bey, come back later :( ************");
+        clear();
         return;
       } else {
         printf("Wrong input, try again!!\n");

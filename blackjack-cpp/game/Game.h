@@ -16,7 +16,7 @@ class Game: public GameLibrary {
     std::vector<Player> players;
     Dealer dealer;
 
-    void createPlayer();
+    void createPlayer(int index);
     void initialize();
     void printPlayers();
     void initializePlayers();
