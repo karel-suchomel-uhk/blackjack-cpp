@@ -1,6 +1,7 @@
 # Blackjack
 
-I have decided to do a Blackjack game for my final project. This document serves the purpose of the summary of the game and as documentation for my program.
+I have decided to do a Blackjack game for my final project. This document serves the purpose of the summary of the game and as a documentation for my program.
+This blackjack game is based on regular rules, not on the casino one's, that means there might be a few things missing. I hope you will enjoy it and that it is sufficient enough. It was my first time writing C++ code, but I believe that it is readable and well structured. I have spent approx. 15h writing this codebase, so there is deffinitely room for improvment.
 
 
 ## Rules of Blackjack
